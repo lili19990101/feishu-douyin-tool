@@ -6,6 +6,7 @@
     { "source": "/douyin/:path*", "destination": "/api/douyin/:path*" },
     { "source": "/redbook/:path*", "destination": "/api/redbook/:path*" },
     { "source": "/file/:path*", "destination": "/api/file/:path*" },
-    { "source": "/api/:path*", "destination": "/api/:path*" }
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/:path*", "destination": "/api/index" }
   ]
 }
