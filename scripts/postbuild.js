@@ -4,6 +4,9 @@ const path = require('path');
 const rootDir = path.resolve(__dirname, '..');
 const frontendDist = path.join(rootDir, 'frontend', 'dist');
 const backendPublic = path.join(rootDir, 'backend', 'public');
+const rootPublic = path.join(rootDir, 'public');
+const preservedBackendFiles = new Set(['.gitignore']);
+const preservedRootFiles = new Set(['.gitignore']);
 const preservedFiles = new Set(['.gitignore']);
 
 function ensureDir(dirPath) {
@@ -12,10 +15,10 @@ function ensureDir(dirPath) {
   }
 }
 
-function cleanDir(dirPath) {
+function cleanDir(dirPath, preserved = new Set()) {
   const entries = fs.existsSync(dirPath) ? fs.readdirSync(dirPath, { withFileTypes: true }) : [];
   for (const entry of entries) {
-    if (preservedFiles.has(entry.name)) {
+    if (preserved.has(entry.name)) {
       continue;
     }
     const targetPath = path.join(dirPath, entry.name);
@@ -43,7 +46,10 @@ if (!fs.existsSync(frontendDist)) {
 }
 
 ensureDir(backendPublic);
-cleanDir(backendPublic);
+ensureDir(rootPublic);
+cleanDir(backendPublic, preservedBackendFiles);
+cleanDir(rootPublic, preservedRootFiles);
 copyRecursive(frontendDist, backendPublic);
+copyRecursive(frontendDist, rootPublic);
 
-console.log('Copied frontend/dist into backend/public');
+console.log('Copied frontend/dist into backend/public and public');
