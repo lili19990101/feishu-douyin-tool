@@ -204,10 +204,18 @@ const getDateByUrl = async (link, dataType) => {
 const getQueryParams = (link, dataType) => {
   let data = {}
   if (dataType.value == 'douyinDetail') {
+      let dyCookiePayload = null
+      if (cookie.value && cookie.value.includes('=')) {
+        dyCookiePayload = parseCookie(cookie.value)
+      }
       data = {
         'url': link,
-        'cookie': cookie.value
       };
+      if (dyCookiePayload) {
+        data.dyCookie = dyCookiePayload
+      } else {
+        data.cookie = cookie.value
+      }
   } else {
     data = {
         'url': link,
